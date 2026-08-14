@@ -18,7 +18,7 @@ URL: `http://localhost:5173`.
 | `npm run dev:development` | `.env.development` | `http://localhost:3000` |
 | `npm run dev:qa` | `.env.qa` | URL de produção (placeholder) |
 
-`npm run dev` é alias de `dev:development`. Ajuste `.env.qa` quando tiver o link do backend.
+`npm run dev` é alias de `dev:development`. Crie `.env.development` / `.env.qa` a partir de `.env.example` (esses arquivos não são commitados).
 
 ## Scripts
 
