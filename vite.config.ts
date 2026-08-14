@@ -11,7 +11,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(rootDir, './src'),
+      // Shared is built as CJS; Vite needs the ESM TypeScript source for named exports.
+      '@controle-financeiro/shared': path.resolve(
+        rootDir,
+        '../packages/shared/src/index.ts',
+      ),
     },
+  },
+  optimizeDeps: {
+    exclude: ['@controle-financeiro/shared'],
   },
   test: {
     environment: 'jsdom',
