@@ -37,7 +37,7 @@ export const createUserSchema = z.object({
 
 export const createCardSchema = z.object({
   name: z.string().min(1),
-  number: z.string().min(4),
+  number: z.string().min(4).optional().or(z.literal('')),
   bank: z.string().min(1),
   type: z.nativeEnum(CardType),
 })

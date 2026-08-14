@@ -26,6 +26,8 @@ export function CardForm({
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<CardFormValues>({
     resolver: zodResolver(cardFormSchema),
@@ -38,6 +40,9 @@ export function CardForm({
     },
   })
 
+  const selectedType = watch('type')
+  const isBoleto = selectedType === CardType.BOLETO
+
   useEffect(() => {
     if (defaultValues) {
       reset({
@@ -49,20 +54,18 @@ export function CardForm({
     }
   }, [defaultValues, reset])
 
+  useEffect(() => {
+    if (isBoleto) {
+      setValue('number', '')
+    }
+  }, [isBoleto, setValue])
+
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} data-testid="card-form">
       <div className="space-y-2">
         <Label htmlFor="name">Nome</Label>
         <Input id="name" placeholder="Nubank principal" {...register('name')} />
         {errors.name ? <p className="text-sm text-danger">{errors.name.message}</p> : null}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="number">Número</Label>
-        <Input id="number" inputMode="numeric" placeholder="Somente dígitos" {...register('number')} />
-        {errors.number ? (
-          <p className="text-sm text-danger">{errors.number.message}</p>
-        ) : null}
       </div>
 
       <div className="space-y-2">
@@ -84,6 +87,16 @@ export function CardForm({
         </select>
         {errors.type ? <p className="text-sm text-danger">{errors.type.message}</p> : null}
       </div>
+
+      {!isBoleto ? (
+        <div className="space-y-2">
+          <Label htmlFor="number">Número</Label>
+          <Input id="number" inputMode="numeric" placeholder="Somente dígitos (opcional)" {...register('number')} />
+          {errors.number ? (
+            <p className="text-sm text-danger">{errors.number.message}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       {errorMessage ? (
         <p className="text-sm text-danger" role="alert">

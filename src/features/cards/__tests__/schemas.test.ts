@@ -22,4 +22,24 @@ describe('cardFormSchema', () => {
     })
     expect(result.success).toBe(false)
   })
+
+  it('aceita cartão sem número', () => {
+    const result = cardFormSchema.safeParse({
+      name: 'Nubank',
+      number: '',
+      bank: 'Nubank',
+      type: CardType.CREDIT,
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('aceita boleto sem número', () => {
+    const result = cardFormSchema.safeParse({
+      name: 'Conta de luz',
+      number: '',
+      bank: 'Itaú',
+      type: CardType.BOLETO,
+    })
+    expect(result.success).toBe(true)
+  })
 })

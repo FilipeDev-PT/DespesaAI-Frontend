@@ -87,10 +87,12 @@ export function CardList() {
                   <dt className="text-muted-foreground">Tipo</dt>
                   <dd>{typeLabels[card.type]}</dd>
                 </div>
-                <div>
-                  <dt className="text-muted-foreground">Final</dt>
-                  <dd>•••• {card.numberLast4}</dd>
-                </div>
+                {card.numberLast4 ? (
+                  <div>
+                    <dt className="text-muted-foreground">Final</dt>
+                    <dd>•••• {card.numberLast4}</dd>
+                  </div>
+                ) : null}
               </dl>
               <div className="flex flex-wrap gap-2">
                 <Link
