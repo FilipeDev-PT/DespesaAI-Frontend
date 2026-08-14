@@ -10,32 +10,37 @@ import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { UsersPage } from '@/pages/UsersPage'
 import { GuestOnly, RequireAdmin, RequireAuth } from './guards'
 
-export const router = createBrowserRouter([
-  {
-    element: <GuestOnly />,
-    children: [
-      { path: '/login', element: <LoginPage /> },
-      { path: '/forgot-password', element: <ForgotPasswordPage /> },
-      { path: '/reset-password', element: <ResetPasswordPage /> },
-    ],
-  },
-  {
-    element: <RequireAuth />,
-    children: [
-      {
-        element: <AppShell />,
-        children: [
-          { path: '/', element: <CardsPage /> },
-          { path: '/cards/new', element: <CardFormPage /> },
-          { path: '/cards/:id/edit', element: <CardFormPage /> },
-          { path: '/cards/:id/dashboard', element: <CardDashboardPage /> },
-          { path: '/dashboard', element: <GlobalDashboardPage /> },
-          {
-            element: <RequireAdmin />,
-            children: [{ path: '/users', element: <UsersPage /> }],
-          },
-        ],
-      },
-    ],
-  },
-])
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
+
+export const router = createBrowserRouter(
+  [
+    {
+      element: <GuestOnly />,
+      children: [
+        { path: '/login', element: <LoginPage /> },
+        { path: '/forgot-password', element: <ForgotPasswordPage /> },
+        { path: '/reset-password', element: <ResetPasswordPage /> },
+      ],
+    },
+    {
+      element: <RequireAuth />,
+      children: [
+        {
+          element: <AppShell />,
+          children: [
+            { path: '/', element: <CardsPage /> },
+            { path: '/cards/new', element: <CardFormPage /> },
+            { path: '/cards/:id/edit', element: <CardFormPage /> },
+            { path: '/cards/:id/dashboard', element: <CardDashboardPage /> },
+            { path: '/dashboard', element: <GlobalDashboardPage /> },
+            {
+              element: <RequireAdmin />,
+              children: [{ path: '/users', element: <UsersPage /> }],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  basename ? { basename } : undefined,
+)

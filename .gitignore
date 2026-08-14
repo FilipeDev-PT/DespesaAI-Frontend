@@ -14,10 +14,11 @@ dist-ssr
 *.local
 *.tsbuildinfo
 
-# Env / secrets — only .env.example is versioned
+# Env / secrets — only .env.example and .env.pages are versioned
 .env
 .env.*
 !.env.example
+!.env.pages
 *.pem
 *.p12
 *.key
