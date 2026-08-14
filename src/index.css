@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #f1f5f9;
+  --color-foreground: #0f172a;
+  --color-surface: #ffffff;
+  --color-muted: #e2e8f0;
+  --color-muted-foreground: #64748b;
+  --color-border: #cbd5e1;
+  --color-primary: #0f766e;
+  --color-primary-hover: #0d9488;
+  --color-primary-foreground: #f8fafc;
+  --color-secondary: #e2e8f0;
+  --color-secondary-hover: #cbd5e1;
+  --color-secondary-foreground: #0f172a;
+  --color-danger: #b91c1c;
+  --color-danger-hover: #991b1b;
+  --color-ring: #14b8a6;
+  --font-sans: "Segoe UI", "IBM Plex Sans", "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply min-h-full;
+  }
+
+  body {
+    @apply m-0 min-w-80 bg-background font-sans text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgb(20 184 166 / 0.12), transparent 35%),
+      linear-gradient(180deg, #eef2f7 0%, var(--color-background) 45%, #e8eef5 100%);
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+}
