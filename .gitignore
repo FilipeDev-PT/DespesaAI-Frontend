@@ -7,23 +7,29 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies / build
 node_modules
 dist
 dist-ssr
 *.local
+*.tsbuildinfo
 
-# Env / secrets (templates de ambiente versionados)
+# Env / secrets — only .env.example is versioned
 .env
 .env.*
 !.env.example
-!.env.development
-!.env.qa
+*.pem
+*.p12
+*.key
+credentials*.json
+**/secrets/
 
-# Editor directories and files
+# Editor / OS
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
