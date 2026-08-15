@@ -16,6 +16,8 @@ interface InjectedAuth {
 declare global {
   interface Window {
     __AUTH__?: InjectedAuth
+    /** Set by the mobile WebView to deep-link after loading the SPA root. */
+    __MOBILE_PATH__?: string
   }
 }
 

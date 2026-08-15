@@ -1,7 +1,7 @@
 import { Role } from '@controle-financeiro/shared'
 import { CreditCard, LayoutDashboard, LogOut, Users } from 'lucide-react'
 import { useEffect } from 'react'
-import { Link, NavLink, Outlet, useSearchParams } from 'react-router-dom'
+import { Link, NavLink, Outlet, useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useLogout } from '@/features/auth/hooks/use-auth'
 import { cn } from '@/lib/utils'
@@ -17,6 +17,7 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   )
 
 export function AppShell() {
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const embeddedQuery = searchParams.get('embedded') === '1'
   const embedded = useUiStore((s) => s.embedded)
@@ -25,8 +26,29 @@ export function AppShell() {
   const logout = useLogout()
 
   useEffect(() => {
-    setEmbedded(embeddedQuery)
+    if (embeddedQuery || window.__MOBILE_PATH__) {
+      setEmbedded(true)
+    } else {
+      setEmbedded(embeddedQuery)
+    }
   }, [embeddedQuery, setEmbedded])
+
+  // Mobile WebView loads the SPA root (avoids GitHub Pages 404 on deep links),
+  // then asks us to navigate to the intended screen.
+  useEffect(() => {
+    const go = () => {
+      const target = window.__MOBILE_PATH__
+      if (!target || typeof target !== 'string') return
+      window.__MOBILE_PATH__ = undefined
+      const path = target.startsWith('/') ? target : `/${target}`
+      const sep = path.includes('?') ? '&' : '?'
+      navigate(`${path}${sep}embedded=1`, { replace: true })
+    }
+
+    go()
+    window.addEventListener('mobile-auth', go)
+    return () => window.removeEventListener('mobile-auth', go)
+  }, [navigate])
 
   const hideChrome = embedded || embeddedQuery
 

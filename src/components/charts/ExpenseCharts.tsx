@@ -34,11 +34,19 @@ export function ExpenseCharts({ insights, isLoading }: ExpenseChartsProps) {
     return <p className="text-sm text-muted-foreground">Carregando gráficos...</p>
   }
 
-  const byCategory = (insights?.byCategory ?? []).map((item) => ({
-    name: categoryLabel(String(item.category)),
-    total: Number(item.total),
-    count: item.count,
-  }))
+  const byCategory = (insights?.byCategory ?? []).map((item) => {
+    const row = item as {
+      category: string
+      total?: number
+      value?: number
+      count?: number
+    }
+    return {
+      name: categoryLabel(String(row.category)),
+      total: Number(row.total ?? row.value ?? 0),
+      count: Number(row.count ?? 0),
+    }
+  })
 
   const total = Number(insights?.total ?? 0)
   const count = insights?.count ?? 0
@@ -75,7 +83,7 @@ export function ExpenseCharts({ insights, isLoading }: ExpenseChartsProps) {
           </CardHeader>
           <CardContent className="h-72">
             {byCategory.length ? (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={288}>
                 <PieChart>
                   <Pie data={byCategory} dataKey="total" nameKey="name" outerRadius={90} label>
                     {byCategory.map((entry, index) => (
@@ -98,7 +106,7 @@ export function ExpenseCharts({ insights, isLoading }: ExpenseChartsProps) {
           </CardHeader>
           <CardContent className="h-72">
             {byCategory.length ? (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={288}>
                 <BarChart data={byCategory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
                   <XAxis dataKey="name" tick={{ fontSize: 11 }} />

@@ -117,7 +117,19 @@ export async function apiClient<T>(path: string, options: RequestOptions = {}): 
 }
 
 export async function bootstrapSession() {
-  const injected = window.__AUTH__
+  const params = new URLSearchParams(window.location.search)
+  const embedded = params.get('embedded') === '1' || Boolean(window.__MOBILE_PATH__)
+
+  let injected = window.__AUTH__
+  if (embedded && !injected?.accessToken) {
+    const deadline = Date.now() + 1500
+    while (Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      injected = window.__AUTH__
+      if (injected?.accessToken) break
+    }
+  }
+
   if (injected?.accessToken) {
     if (injected.user) {
       useAuthStore.getState().setSession(injected.accessToken, injected.user)
@@ -128,6 +140,9 @@ export async function bootstrapSession() {
     return
   }
 
-  await refreshAccessToken()
+  // Cookie refresh only works in the browser — not inside the mobile WebView.
+  if (!embedded) {
+    await refreshAccessToken()
+  }
   useAuthStore.getState().setBootstrapped(true)
 }
