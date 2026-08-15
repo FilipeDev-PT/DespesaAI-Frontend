@@ -62,7 +62,7 @@ export function ExpenseCharts({ insights, isLoading }: ExpenseChartsProps) {
             <p className="text-3xl font-semibold tracking-tight text-primary">
               {formatCurrency(total)}
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">{count} lançamentos</p>
+            <p className="mt-1 text-sm text-muted-foreground">{count} parcelas no período</p>
           </CardContent>
         </Card>
         <Card>

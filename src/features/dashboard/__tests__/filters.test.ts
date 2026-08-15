@@ -33,3 +33,20 @@ describe('dashboard filter helpers', () => {
     )
   })
 })
+
+describe('month horizon helpers', () => {
+  it('converte data ISO para chave de mês', async () => {
+    const { toMonthKey, lastDayOfMonthKey, buildMonthOptions } = await import(
+      '../utils/filters'
+    )
+    expect(toMonthKey('2027-07-01')).toBe('2027-07')
+    expect(lastDayOfMonthKey('2026-02')).toBe('2026-02-28')
+
+    const months = buildMonthOptions({
+      firstMonthKey: '2026-06',
+      lastMonthKey: '2026-08',
+      reference: new Date(2026, 6, 1),
+    })
+    expect(months.map((m) => m.key)).toEqual(['2026-06', '2026-07', '2026-08'])
+  })
+})

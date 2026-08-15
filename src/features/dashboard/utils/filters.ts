@@ -31,13 +31,73 @@ export function currentMonthKey(date = new Date()) {
   return `${year}-${month}`
 }
 
-export function buildMonthOptions(reference = new Date(), count = 12) {
-  const months: { key: string; label: string }[] = []
-  for (let i = count - 1; i >= 0; i -= 1) {
-    const d = new Date(reference.getFullYear(), reference.getMonth() - i, 1)
-    const key = currentMonthKey(d)
-    const label = d.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })
-    months.push({ key, label })
+/** YYYY-MM-DD or YYYY-MM → YYYY-MM */
+export function toMonthKey(value?: string | null) {
+  if (!value) return null
+  const match = value.match(/^(\d{4})-(\d{2})/)
+  return match ? `${match[1]}-${match[2]}` : null
+}
+
+export function parseMonthKey(key: string) {
+  const [y, m] = key.split('-').map(Number)
+  return new Date(y, m - 1, 1)
+}
+
+export function lastDayOfMonthKey(key: string) {
+  const [y, m] = key.split('-').map(Number)
+  const last = new Date(y, m, 0)
+  const day = String(last.getDate()).padStart(2, '0')
+  return `${y}-${String(m).padStart(2, '0')}-${day}`
+}
+
+export function formatMonthLabel(key: string) {
+  return parseMonthKey(key).toLocaleDateString('pt-BR', {
+    month: 'short',
+    year: '2-digit',
+  })
+}
+
+/**
+ * Builds month chips from the installment horizon.
+ * Falls back to the last 12 months ending at `reference` when no horizon exists.
+ */
+export function buildMonthOptions(options?: {
+  firstMonthKey?: string | null
+  lastMonthKey?: string | null
+  reference?: Date
+  fallbackCount?: number
+}) {
+  const reference = options?.reference ?? new Date()
+  const fallbackCount = options?.fallbackCount ?? 12
+  const nowKey = currentMonthKey(reference)
+
+  let startKey = toMonthKey(options?.firstMonthKey)
+  let endKey = toMonthKey(options?.lastMonthKey)
+
+  if (!startKey || !endKey) {
+    endKey = nowKey
+    const start = new Date(reference.getFullYear(), reference.getMonth() - (fallbackCount - 1), 1)
+    startKey = currentMonthKey(start)
+  } else {
+    // Always include the current month so the strip stays usable.
+    if (startKey > nowKey) startKey = nowKey
+    if (endKey < nowKey) endKey = nowKey
   }
+
+  const months: { key: string; label: string }[] = []
+  let cursor = parseMonthKey(startKey)
+  const end = parseMonthKey(endKey)
+
+  // Cap strip length to avoid huge ranges (e.g. 60 months).
+  const maxMonths = 36
+  while (cursor <= end && months.length < maxMonths) {
+    const key = currentMonthKey(cursor)
+    months.push({
+      key,
+      label: formatMonthLabel(key),
+    })
+    cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1)
+  }
+
   return months
 }

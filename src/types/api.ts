@@ -59,6 +59,10 @@ export type ExpenseInsights = {
   total: number
   count: number
   byCategory: CategoryInsight[]
+  /** First day of the earliest installment due month (YYYY-MM-DD). */
+  firstInstallmentDueMonth?: string | null
+  /** First day of the latest installment due month (YYYY-MM-DD). */
+  lastInstallmentDueMonth?: string | null
 }
 
 export type ExpenseFilters = {

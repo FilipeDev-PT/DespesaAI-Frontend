@@ -70,14 +70,14 @@ export function CardList() {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {data.map((card) => (
-          <Card key={card.id} data-testid={`card-item-${card.id}`}>
+          <Card key={card.id} className="flex h-full flex-col" data-testid={`card-item-${card.id}`}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="size-5 text-primary" />
                 {card.name}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="flex flex-1 flex-col space-y-4">
               <dl className="grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <dt className="text-muted-foreground">Banco</dt>
@@ -94,7 +94,7 @@ export function CardList() {
                   </div>
                 ) : null}
               </dl>
-              <div className="flex flex-wrap gap-2">
+              <div className="mt-auto flex flex-wrap gap-2">
                 <Link
                   to={`/cards/${card.id}/dashboard`}
                   className={cn(linkButtonClass, linkSecondary)}

@@ -4,10 +4,17 @@ import { buildMonthOptions } from '../utils/filters'
 type MonthStripProps = {
   value: string
   onChange: (month: string) => void
+  firstMonthKey?: string | null
+  lastMonthKey?: string | null
 }
 
-export function MonthStrip({ value, onChange }: MonthStripProps) {
-  const months = buildMonthOptions()
+export function MonthStrip({
+  value,
+  onChange,
+  firstMonthKey,
+  lastMonthKey,
+}: MonthStripProps) {
+  const months = buildMonthOptions({ firstMonthKey, lastMonthKey })
 
   return (
     <div
