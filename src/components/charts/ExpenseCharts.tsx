@@ -4,6 +4,7 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
+  LabelList,
   Legend,
   Pie,
   PieChart,
@@ -107,12 +108,33 @@ export function ExpenseCharts({ insights, isLoading }: ExpenseChartsProps) {
           <CardContent className="h-72">
             {byCategory.length ? (
               <ResponsiveContainer width="100%" height={288}>
-                <BarChart data={byCategory}>
+                <BarChart
+                  data={byCategory}
+                  margin={{ top: 24, right: 8, left: 0, bottom: 8 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
-                  <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 11 }}
+                    interval={0}
+                    angle={byCategory.length > 4 ? -25 : 0}
+                    textAnchor={byCategory.length > 4 ? 'end' : 'middle'}
+                    height={byCategory.length > 4 ? 56 : 30}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11 }}
+                    tickFormatter={(value) => formatCurrency(Number(value))}
+                    width={72}
+                  />
                   <Tooltip formatter={(value) => formatCurrency(Number(value))} />
-                  <Bar dataKey="total" fill="#0f766e" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="total" fill="#0f766e" radius={[6, 6, 0, 0]}>
+                    <LabelList
+                      dataKey="total"
+                      position="top"
+                      formatter={(value) => formatCurrency(Number(value))}
+                      style={{ fill: '#0f172a', fontSize: 11, fontWeight: 600 }}
+                    />
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             ) : (
